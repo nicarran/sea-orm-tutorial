@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js rust">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Remote Database Operations - SeaORM Tutorials</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "rust";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('rust')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="ch00-00-introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="ch01-00-simple-crud-getting-started.html"><strong aria-hidden="true">1.</strong> Chapter 1 - Simple CRUD Operations</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch01-01-create-operation.html"><strong aria-hidden="true">1.1.</strong> Create Operation</a></li><li class="chapter-item expanded "><a href="ch01-02-insert-operations.html"><strong aria-hidden="true">1.2.</strong> Insert Operation</a></li><li class="chapter-item expanded "><a href="ch01-03-read-operation.html"><strong aria-hidden="true">1.3.</strong> Read Operation</a></li><li class="chapter-item expanded "><a href="ch01-04-update-operation.html"><strong aria-hidden="true">1.4.</strong> Update Operation</a></li><li class="chapter-item expanded "><a href="ch01-05-delete-operation.html"><strong aria-hidden="true">1.5.</strong> Delete Operation</a></li><li class="chapter-item expanded "><a href="ch01-06-relationships.html"><strong aria-hidden="true">1.6.</strong> Multi-table relationships</a></li></ol></li><li class="chapter-item expanded "><a href="ch02-00-todo-app-getting-started.html"><strong aria-hidden="true">2.</strong> Chapter 2 - A Command-line TODO app</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch02-01-http-server.html"><strong aria-hidden="true">2.1.</strong> Building The Web Server</a></li><li class="chapter-item expanded "><a href="ch02-02-tables.html"><strong aria-hidden="true">2.2.</strong> Creating Tables</a></li><li class="chapter-item expanded "><a href="ch02-03-server.html"><strong aria-hidden="true">2.3.</strong> Building Server Connections and Responses</a></li><li class="chapter-item expanded "><a href="ch02-04-00-client.html"><strong aria-hidden="true">2.4.</strong> Building The TODO HTTP Client</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ch02-04-01-utils.html"><strong aria-hidden="true">2.4.1.</strong> Formatting Utilities</a></li><li class="chapter-item expanded "><a href="ch02-04-02-remote-db.html" class="active"><strong aria-hidden="true">2.4.2.</strong> Remote Database Operations</a></li><li class="chapter-item expanded "><a href="ch02-04-03-stdout.html"><strong aria-hidden="true">2.4.3.</strong> Reading User Input</a></li></ol></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">SeaORM Tutorials</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/SeaQL/sea-orm-tutorial/edit/master/tutorials-book/src/ch02-04-02-remote-db.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="remote-database-operations"><a class="header" href="#remote-database-operations">Remote Database Operations</a></h1>
+<h3 id="data-persistence-to-the-local-database"><a class="header" href="#data-persistence-to-the-local-database">Data Persistence to the local database</a></h3>
+<p>First, import necessary dependencies</p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">+ use serde::{Serialize, Deserialize};
++ use crate::{synching_to_server, MemDB, MyTodos, MyTodosActiveModel, MyTodosModel};
+
+</code></pre>
+<h4 id="fetching-the-fruits"><a class="header" href="#fetching-the-fruits">Fetching the fruits</a></h4>
+<p>The <code>get_fruits()</code> function fetches the list of fruits from the remote PostgreSQL database using HTTP at the <code>/fruits</code> route. The response <code>response.as_str()?</code> is serialized using <code>serde_json</code> to reate the <code>fruits</code> list.</p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn get_fruits() -&gt; anyhow::Result&lt;Vec&lt;String&gt;&gt; {
+    let response = minreq::get(&quot;http://127.0.0.1:8080/fruits&quot;).send()?;
+
+    let fruits_list: Vec&lt;String&gt; = serde_json::from_str(&amp;response.as_str()?)?;
+
+    Ok(fruits_list)
+}
+</code></pre>
+<h4 id="storing-the-fruits-in-local-cache"><a class="header" href="#storing-the-fruits-in-local-cache">Storing the fruits in local cache</a></h4>
+<p>The <code>store()</code> function takes a <code>DatabaseConnection</code> , <code>quantity</code> and <code>todo_name</code> as arguments and creates an <code>ActiveModel</code> as defined by <code>MyTodosActiveModel</code> which is then inserted into the SQLite cache using<code>MyTodos::insert()</code>.</p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn store(db: &amp;DatabaseConnection, quantity: &amp;str, todo_name: &amp;str) -&gt; anyhow::Result&lt;()&gt; {
+    let my_todo = MyTodosActiveModel {
+        todo_name: Set(todo_name.to_owned()),
+        quantity: Set(quantity.to_owned()),
+        status: Set(0),
+        ..Default::default()
+    };
+
+    MyTodos::insert(my_todo).exec(db).await?;
+
+    Ok(())
+}
+</code></pre>
+<h4 id="fetching-the-todo-models-from-the-local-sqlite-cache"><a class="header" href="#fetching-the-todo-models-from-the-local-sqlite-cache">Fetching the TODO Models from the local SQLite cache</a></h4>
+<p><code>get()</code> function fetches all the <code>TODO</code> models using <code>MyTodos::find().all()</code> returning all the fetched Models as <code>Vec&lt;Model&gt;</code></p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn get(db: &amp;DatabaseConnection) -&gt; Result&lt;Vec&lt;MyTodosModel&gt;, sea_orm::DbErr&gt; {
+    MyTodos::find().all(db).await
+}
+</code></pre>
+<h4 id="performing-modifications-on-the-local-sqlite-cache"><a class="header" href="#performing-modifications-on-the-local-sqlite-cache">Performing modifications on the local SQLite cache</a></h4>
+<p>The <code>edit()</code> , <code>done()</code> and <code>undo()</code> functions perform modifications to the SQLite data. The <code>edit()</code> function modifies a TODO in the queue by changing it's <code>quantity</code>. The <code>done()</code> function moves an incomplete todo from the <code>queued</code> field of the <code>TodoList</code> struct into the <code>completed</code> field of the <code>TodoList</code> struct while the <code>undo()</code> function does the opposite, moving a TODO from the <code>completed</code> field to the <code>queued</code> field of the <code>TodoList</code> struct.</p>
+<p><code>File: src/db_ops.rs</code></p>
+<pre><code class="language-rust no_run noplayground">pub async fn edit(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+    quantity: String,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.quantity = Set(quantity);
+
+    Ok(todos_active_model.update(db).await?)
+}
+
+pub async fn done(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.status = Set(1);
+
+    Ok(todos_active_model.update(db).await?)
+}
+
+pub async fn undo(
+    db: &amp;DatabaseConnection,
+    todo_model: &amp;MyTodosModel,
+) -&gt; Result&lt;MyTodosModel, sea_orm::DbErr&gt; {
+    let mut todos_active_model: MyTodosActiveModel = todo_model.to_owned().into();
+    todos_active_model.status = Set(0);
+
+    Ok(todos_active_model.update(db).await?)
+}
+</code></pre>
+<h4 id="initializing-the-in-memory-database-with-the-sqlite-cache"><a class="header" href="#initializing-the-in-memory-database-with-the-sqlite-cache">Initializing the In-memory database with the SQLite cache</a></h4>
+<p>Sometimes the <code>client</code> might not exit gracefully using the <code>EXIT</code> command, this prevents the <code>client</code> from syncing the cache with the remote database. The <code>load_sqlite_cache()</code> function loads the SQLite cache into in-memory database <code>MemDB</code>. It iterates the result of the <code>get()</code> function and uses the <code>todo_name</code> field of the <code>MyTodosModel</code> as the <code>key</code> of the <code>MemDB</code>.</p>
+<pre><code class="language-rust no_run noplayground">pub(crate) async fn load_sqlite_cache(
+    db: &amp;DatabaseConnection,
+    memdb: &amp;mut MemDB,
+) -&gt; Result&lt;(), sea_orm::DbErr&gt; {
+    let sqlite_cache = get(&amp;db).await?;
+    memdb.lock().await.clear();
+    for mytodo_model in sqlite_cache {
+        memdb
+            .lock()
+            .await
+            .insert(mytodo_model.todo_name.clone(), mytodo_model);
+    }
+
+    Ok(())
+}
+</code></pre>
+<h4 id="updating-the-remote-database-on-graceful-exit"><a class="header" href="#updating-the-remote-database-on-graceful-exit">Updating the remote database on graceful exit.</a></h4>
+<p>The <code>update_remote_storage()</code> uses the <code>username</code> and contents of the <code>MemDB</code> to update the remote database over HTTP protocol. The <code>TodoList</code> struct is first initialized and the contents of the <code>MemDB</code> are sorted into <code>queued</code> and <code>completed</code> TODOs and then converted into JSON string. The <code>username</code> and this JSON string are also converted into JSON using the <code>json</code> crate and then sent to the remote server using <code>minreq</code> at the <code>/update_todo</code> route. If the HTTP response status code is   <code>500</code> and the matching body data is <code>ome(&quot;MODEL_NOT_FOUND&quot;)</code>, then another request is made to the <code>/store</code> route where a new <code>username</code> is created and the <code>todo_list</code> added under that username.</p>
+<pre><code class="language-rust no_run noplayground">pub async fn update_remote_storage(memdb: &amp;MemDB, username: &amp;str) -&gt; anyhow::Result&lt;()&gt; {
+    let mut temp_list = TodoList::default();
+    memdb.lock().await.values().for_each(|todo| {
+        if todo.status == 0 {
+            temp_list.queued.push(todo.to_owned());
+        } else {
+            temp_list.completed.push(todo.to_owned());
+        }
+    });
+
+    let todo_list = serde_json::to_string(&amp;temp_list)?;
+
+    synching_to_server();
+
+    let response = minreq::post(&quot;http://127.0.0.1:8080/update_todo&quot;)
+        .with_header(&quot;Content-Type&quot;, &quot;application/json&quot;)
+        .with_body(
+            json::object! {
+                username: username,
+                todo_list: todo_list.clone(),
+            }
+            .dump(),
+        )
+        .send()?;
+
+    if response.status_code == 500 {
+        let body = serde_json::from_str::&lt;Option&lt;String&gt;&gt;(&amp;response.as_str()?)?;
+        if body == Some(&quot;MODEL_NOT_FOUND&quot;.to_owned()) {
+            minreq::post(&quot;http://127.0.0.1:8080/store&quot;)
+                .with_header(&quot;Content-Type&quot;, &quot;application/json&quot;)
+                .with_body(
+                    json::object! {
+                        username: username,
+                        todo_list: todo_list,
+                    }
+                    .dump(),
+                )
+                .send()?;
+        }
+    }
+
+    Ok(())
+}
+
+</code></pre>
+<p>Up next is reading from the terminal and performing database operations bases on the command.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ch02-04-01-utils.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="ch02-04-03-stdout.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ch02-04-01-utils.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="ch02-04-03-stdout.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>

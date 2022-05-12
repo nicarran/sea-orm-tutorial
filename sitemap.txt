@@ -1,0 +1,17 @@
+https://www.sea-ql.org/sea-orm-tutorial
+https://www.sea-ql.org/sea-orm-tutorial/ch00-00-introduction
+https://www.sea-ql.org/sea-orm-tutorial/ch01-00-simple-crud-getting-started
+https://www.sea-ql.org/sea-orm-tutorial/ch01-01-create-operation
+https://www.sea-ql.org/sea-orm-tutorial/ch01-02-insert-operations
+https://www.sea-ql.org/sea-orm-tutorial/ch01-03-read-operation
+https://www.sea-ql.org/sea-orm-tutorial/ch01-04-update-operation
+https://www.sea-ql.org/sea-orm-tutorial/ch01-05-delete-operation
+https://www.sea-ql.org/sea-orm-tutorial/ch01-06-relationships
+https://www.sea-ql.org/sea-orm-tutorial/ch02-00-todo-app-getting-started
+https://www.sea-ql.org/sea-orm-tutorial/ch02-01-http-server
+https://www.sea-ql.org/sea-orm-tutorial/ch02-02-tables
+https://www.sea-ql.org/sea-orm-tutorial/ch02-03-server
+https://www.sea-ql.org/sea-orm-tutorial/ch02-04-00-client
+https://www.sea-ql.org/sea-orm-tutorial/ch02-04-01-utils
+https://www.sea-ql.org/sea-orm-tutorial/ch02-04-02-remote-db
+https://www.sea-ql.org/sea-orm-tutorial/ch02-04-03-stdout
